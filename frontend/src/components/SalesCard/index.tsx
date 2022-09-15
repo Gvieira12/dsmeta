@@ -11,17 +11,24 @@ function SalesCard() {
     const min = new Date(new Date().setDate(new Date().getDate() - 365));
     const max = new Date()
 
+    const [minDate, setMinDate] = useState(min);
+    const [maxDate, setMaxDate] = useState(max);
+
     const [sales, setSales] = useState<Sale[]>([]);
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/sales`)
+
+        const dmin = minDate.toISOString().slice(0, 10);
+        const dmax = maxDate.toISOString().slice(0, 10);
+
+        console.log(dmin);
+
+        axios.get(`${BASE_URL}/sales?minDate=${dmin}&maxDate=${dmax}`)
             .then(response => {
                 setSales(response.data.content)
             })
-    }, []);
+    }, [minDate, maxDate]);
 
-    const [minDate, setMinDate] = useState(min)
-    const [maxDate, setMaxDate] = useState(max)
 
     return (
         <div className="dsmeta-card">
@@ -59,25 +66,25 @@ function SalesCard() {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            sales.map(sale => {
-                                return (
-                                    <tr key={sale.id}>
-                                        <td className="show992">{sale.id}</td>
-                                        <td className="show576">{new Date(sale.date).toLocaleDateString()}</td>
-                                        <td>{sale.sellerName}</td>
-                                        <td className="show992">{sale.visited}</td>
-                                        <td className="show992">{sale.deals}</td>
-                                        <td>R$ {sale.amount.toFixed(2)}</td>
-                                        <td>
-                                            <div className="dsmeta-red-btn-container">
-                                                <NotificationButton />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        }
+
+                        {sales.map(sale => {
+                            return (
+                                <tr key={sale.id}>
+                                    <td className="show992">{sale.id}</td>
+                                    <td className="show576">{new Date(sale.date).toLocaleDateString()}</td>
+                                    <td>{sale.sellerName}</td>
+                                    <td className="show992">{sale.visited}</td>
+                                    <td className="show992">{sale.deals}</td>
+                                    <td>R$ {sale.amount.toFixed(2)}</td>
+                                    <td>
+                                        <div className="dsmeta-red-btn-container">
+                                            <NotificationButton />
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+
 
                     </tbody>
 
