@@ -7,7 +7,7 @@ import SalesCard from "../src/components/SalesCard"
 function App() {
   return (
     <>
-      <ToastContainer />
+      <ToastContainer /> 
       <Header />
       <main>
         <section id="sales">
